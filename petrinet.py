@@ -5,6 +5,7 @@ from Clock import Clock
 class PetriNet:
     def __init__(self):
         # declare Places
+        clk = Clock()
         P1 = Place()
         P2 = Place()
         P3 = Place()

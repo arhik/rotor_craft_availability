@@ -12,7 +12,7 @@ class Transition:
     def computeFire(self):
         self.Fire = False
         if len(self.inArcs)==0:
-            if type(self) not in [TimeTransition, ImmediateTransition]:
+            if type(self) not in [TimedTransition, ImmediateTransition]:
                 raise TypeError
 
         for arc in self.inArcs:
@@ -48,10 +48,10 @@ class TimedTransition(Transition):
         super().__init__(timer)
         self.clock = clock
         self.tickmark = clock.timeElapsed
-        self.timeInterval = 1 if type(timer) != Timer else next(timer)
+        self.timeInterval = 1 if timer==None else next(timer)
 
     def compute(self):
         if  timeInterval == self.clock.timeElapsed - tickmark:
             self.fire()
             self.tickmark = self.clock.timeElapsed
-            self.timeInterval = 1 if type(timer) != Timer else next(timer)
+            self.timeInterval = 1 if timer==None else next(timer)

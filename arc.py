@@ -4,8 +4,12 @@ from transition import Transition
 class Arc:
     def __init__(self, to, frm, weight=1):
         self.weight = weight
-        self.to = self._validate(to, frm)
-        self.frm = self._validate(frm,to)
+        self._validate(to, frm)
+        self._validate(frm,to)
+        self.to = to
+        self.frm = frm
+        self.to.inArcs.append(self)
+        self.frm.outArcs.append(self)
         
     def _validate(self, to, frm):
         if type(to)==Place:
@@ -14,9 +18,7 @@ class Arc:
         elif type(to)==Transition:
             if type(frm)==Transition:
                 raise TypeError
-        to.inArcs.append(self)
-        frm.outArcs.append(self)
-        return to
+
 
 class InhibitorArc(Arc):
     def __init__(self,to, frm):
@@ -26,5 +28,3 @@ class InhibitorArc(Arc):
         if type(frm)==Place:
             raise TypeError
         assert(type(frm)==Transition)
-        to.inArcs.append(self)
-        frm.outArcs.append(self)
