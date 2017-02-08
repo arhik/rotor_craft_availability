@@ -10,6 +10,7 @@ class Arc:
         self.frm = frm
         self.to.inArcs.append(self)
         self.frm.outArcs.append(self)
+        self.type = "Arc"
         
     def _validate(self, to, frm):
         if type(to)==Place:
@@ -23,6 +24,7 @@ class Arc:
 class InhibitorArc(Arc):
     def __init__(self,to, frm):
         super().__init__(self, to, frm)
+        self.type = "InhibitorArc"
     
     def _validate(self, to ,frm):
         if type(frm)==Place:

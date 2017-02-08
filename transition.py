@@ -1,8 +1,7 @@
 
 class Transition:
     def __init__(self,timer=None):
-        self.fire = False
-        self.fired = False
+        self.fire_bool = False
         self.inArcs = []
         self.outArcs = []
         self.timer = timer
@@ -10,16 +9,16 @@ class Transition:
         self.timePassed = None
 
     def computeFire(self):
-        self.Fire = False
+        self.fire_bool = False
         if len(self.inArcs)==0:
             if type(self) not in [TimedTransition, ImmediateTransition]:
                 raise TypeError
 
         for arc in self.inArcs:
-            if type(arc)==type(InhibitorArc):
-                self.fire = self.fire | arc.frm.token_number <= arc.weight # double check equality
-            self.fire = self.fire | arc.frm.token_number >= arc.weight
-        return self.fire
+            if arc.type=="InhibitorArc":
+                self.fire_bool = self.fire_bool | arc.frm.token_number <= arc.weight # double check equality
+            self.fire_bool = self.fire_bool | arc.frm.token_number >= arc.weight
+        return self.fire_bool
 
     def fire(self):
         readyToFire = self.computeFire()
