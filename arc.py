@@ -2,7 +2,7 @@ from place import Place
 from transition import Transition
 
 class Arc:
-    def __init__(self, to, frm, weight=1):
+    def __init__(self, to, frm, weight=1, name=None):
         self.weight = weight
         self._validate(to, frm)
         self._validate(frm,to)
@@ -11,8 +11,13 @@ class Arc:
         self.to.inArcs.append(self)
         self.frm.outArcs.append(self)
         self.type = "Arc"
+        self.name = name
         
-    def _validate(self, to, frm):
+    def update(self, value):
+        self.weight = value
+
+    @staticmethod
+    def _validate(to, frm):
         if type(to)==Place:
             if type(frm)==Place:
                 raise TypeError
@@ -22,11 +27,18 @@ class Arc:
 
 
 class InhibitorArc(Arc):
-    def __init__(self,to, frm):
-        super().__init__(self, to, frm)
+    def __init__(self,to, frm, weight=1):
+        self.weight = weight
+        self._validate(to,frm)
+        self.to = to
+        self.frm = frm
+        self.to.inArcs.append(self)
+        self.frm.outArcs.append(self)
         self.type = "InhibitorArc"
     
-    def _validate(self, to ,frm):
-        if type(frm)==Place:
+    @staticmethod
+    def _validate(to ,frm):
+        if type(to)==Place:
             raise TypeError
-        assert(type(frm)==Transition)
+        # assert(type(to)==Transition)
+        assert(type(frm)==Place)

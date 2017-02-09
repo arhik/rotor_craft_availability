@@ -6,10 +6,10 @@ def timer_uniform(low=0, high=10):
         yield r.randint(low, high)
 
 
-def timer_normal(mu=10, sigma=5):
+def timer_normal(mu=10, sigma=2):
     r = Random()
     while True:
-        yield floor(r.normalvariate(mu, sigma))
+        yield math.floor(r.normalvariate(mu, sigma))
 
 def timer_sinusoidal(amp = 10, low = 0, high = 10):
     init  = 0

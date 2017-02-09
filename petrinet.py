@@ -4,8 +4,10 @@ from Clock import Clock
 
 class PetriNet:
     def __init__(self):
-        # declare Places
+        # Define Clock
         clk = Clock()
+
+        # declare Places
         P1 = Place()
         P2 = Place()
         P3 = Place()
@@ -22,5 +24,7 @@ class PetriNet:
     
     def run(self):
         for transition in self.transitions:
+            transition.compute()
+            
             
         
