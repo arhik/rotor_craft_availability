@@ -1,11 +1,9 @@
 
 class Transition:
-    def __init__(self,timer=None, name=None):
+    def __init__(self, name=None):
         self.fire_bool = False
         self.inArcs = []
         self.outArcs = []
-        self.timer = timer
-        self.timeInterval = None
         self.name = name
 
     def computeFire(self):
@@ -26,24 +24,22 @@ class Transition:
         return self.fire_bool
 
     def fire(self):
-        readyToFire = self.computeFire()
-        if readyToFire:
-            for arc in self.inArcs:
-                if arc.type=="InhibitorArc":
-                    continue
-                # I think I should copy places
+        for arc in self.inArcs:
+            if arc.type=="InhibitorArc":
+                continue
+            # I think I should copy places
+            if arc.frm.token_number > 0:
                 arc.frm.token_number = arc.frm.token_number - arc.weight
-            for arc in self.outArcs:
-                print("Hello")
-                arc.to.token_number = arc.to.token_number + arc.weight
+        for arc in self.outArcs:
+            arc.to.token_number = arc.to.token_number + arc.weight
 
     def compute(self):
         raise TypeError
 
 
 class ImmediateTransition(Transition):
-    def __init__(self, clock, timer=None):
-        super().__init__(timer)
+    def __init__(self, clock, timer=None,name=None):
+        super().__init__(name)
         self.clock = clock
         
     def compute(self):
@@ -51,15 +47,24 @@ class ImmediateTransition(Transition):
 
 
 class TimedTransition(Transition):
-    def __init__(self,clock, timer=None):
-        super().__init__(timer)
+    def __init__(self,clock, timer=None, name=None):
+        super().__init__(name)
         self.timer = timer
         self.clock = clock
-        self.tickmark = clock.timeElapsed
-        self.timeInterval = 1 if self.timer==None else next(self.timer)
+        self.tickMark = None
+        self.timeInterval = None
 
     def compute(self):
-        if  (self.timeInterval == (self.clock.timeElapsed - self.tickmark)):
-            self.fire()
-            self.tickmark = self.clock.timeElapsed
-            self.timeInterval = 1 if self.timer==None else next(self.timer)
+        self.computeFire()
+        if not self.fire_bool:
+            self.timeMark = None
+            self.timeInterval = None
+        if  self.fire_bool:
+            if self.tickMark ==None:
+                self.tickMark = self.clock.timeElapsed
+            if self.timeInterval == None:
+                self.timeInterval = 1 if self.timer==None else next(self.timer)
+            if (self.timeInterval == (self.clock.timeElapsed - self.tickMark)):
+                self.fire()
+                self.tickMark =None
+                self.timeInterval = None

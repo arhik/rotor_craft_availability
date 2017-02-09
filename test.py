@@ -7,6 +7,7 @@ from place import Place
 from timer_utils import timer_normal
 from itertools import count
 import sys
+import time
 
 clk = Clock()
 
@@ -125,17 +126,50 @@ A9 = Arc(P9, T4)
 print(T4.timeInterval)
 tick = clk.tick()
 print("T4 outArcs: {}".format(T4.outArcs))
-for i in count(start=0, step=1):
-    try:
-        next(tick)
-        T4.compute()
+# for i in count(start=0, step=1):
+#     try:
+#         next(tick)
+#         T4.compute()
         
-        print("T4 tickMark: {}".format(T4.tickmark))
-        print("T4 timeElapsed: {}".format(T4.clock.timeElapsed))
-        print("P9: Token_number: {}".format(P9.token_number))
-        print(P9.name)
+#         print("T4 tickMark: {}".format(T4.tickmark))
+#         print("T4 timeElapsed: {}".format(T4.clock.timeElapsed))
+#         print("P9: Token_number: {}".format(P9.token_number))
+#         print(P9.name)
+#     except KeyboardInterrupt as e:
+#         sys.exit(1)
+
+T5 = TimedTransition(clk, timer=timer_normal(mu=2, sigma=3))
+
+P10 = Place(token_number=3, name="Depo")
+
+T6 = TimedTransition(clk,timer= timer_normal(mu = 5, sigma=5))
+P11 = Place(name="RepairState")
+
+A10 = Arc(P10,T5)
+A11 = Arc(T6,P10)
+A12 = Arc(P11,T6)
+A13 = Arc(T5, P11)
+
+transitions = [T5, T6]
+for i in count():
+    try:
+        time.sleep(1)
+        next(tick)
+        for t in transitions:
+            t.compute()
+            print("T5 timeInterval: {}".format(T5.timeInterval))
+            print("T6 timeInterval: {}".format(T6.timeInterval))
+            print("T5 tickMark: {}".format(T5.tickMark))
+            print("T5 timeElapsed: {}".format(T5.clock.timeElapsed))
+            print("T6 tickMark: {}".format(T6.tickMark))
+            print("T6 timeElapsed: {}".format(T6.clock.timeElapsed))
+            print("P10: Token_number: {}".format(P10.token_number))
+            print("P11: Token_number: {}".format(P11.token_number))
     except KeyboardInterrupt as e:
         sys.exit(1)
+
+
+
 
 
 
