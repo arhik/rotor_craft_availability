@@ -37,13 +37,6 @@ class Transition:
         raise TypeError
 
 
-class ImmediateTransition(Transition):
-    def __init__(self, clock, timer=None,name=None):
-        super().__init__(name)
-        self.clock = clock
-        
-    def compute(self):
-        self.fire()
 
 
 class TimedTransition(Transition):
@@ -52,7 +45,18 @@ class TimedTransition(Transition):
         self.timer = timer
         self.clock = clock
         self.tickMark = None
-        self.timeInterval = None
+        self._timeInterval = None
+    
+    @property
+    def timeInterval(self):
+        return self._timeInterval
+    
+    @timeInterval.setter
+    def timeInterval(self, x):
+        if x is None:
+            self._timeInterval = None
+        else:
+            self._timeInterval = 0 if self.timer==None else next(self.timer)
 
     def compute(self):
         self.computeFire()
@@ -63,8 +67,14 @@ class TimedTransition(Transition):
             if self.tickMark ==None:
                 self.tickMark = self.clock.timeElapsed
             if self.timeInterval == None:
-                self.timeInterval = 1 if self.timer==None else next(self.timer)
+                self.timeInterval = int 
             if (self.timeInterval == (self.clock.timeElapsed - self.tickMark)):
                 self.fire()
-                self.tickMark =None
+                self.tickMark = None
                 self.timeInterval = None
+
+
+class ImmediateTransition(TimedTransition):
+    def __init__(self, clock, timer=None,name=None):
+        super().__init__(clock, timer, name)
+        self.timer = None
