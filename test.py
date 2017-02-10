@@ -169,17 +169,32 @@ print("T4 outArcs: {}".format(T4.outArcs))
 #         sys.exit(1)
 
 P12 = Place(token_number=1)
+P13 = Place(token_number=1)
+
 T12 = ImmediateTransition(clk,name="ResetTransition")
 
 A12 = Arc(T12, P12, name="ResetArc")
+A13 = InhibitorArc(T12, P13, name="Inhibitor")
 
+P14 = Place()
+A14 = Arc(P14,T12, name="result")
+
+print("--------------")
 print(P12.token_number)
+print(P13.token_number)
+print(P14.token_number)
 next(tick)
 T12.compute()
+print("--------------")
 print(P12.token_number)
+print(P13.token_number)
+print(P14.token_number)
 next(tick)
 T12.compute()
+print("--------------")
 print(P12.token_number)
+print(P13.token_number)
+print(P14.token_number)
 
 
 
