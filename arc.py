@@ -14,6 +14,8 @@ class Arc:
         self.name = name
         
     def update(self, value):
+        if value<=0:
+            value = 1
         self.weight = value
 
     @staticmethod
@@ -27,7 +29,7 @@ class Arc:
 
 
 class InhibitorArc(Arc):
-    def __init__(self,to, frm, weight=1):
+    def __init__(self,to, frm, weight=1, name=None):
         self.weight = weight
         self._validate(to,frm)
         self.to = to
@@ -35,10 +37,9 @@ class InhibitorArc(Arc):
         self.to.inArcs.append(self)
         self.frm.outArcs.append(self)
         self.type = "InhibitorArc"
-    
+        self.name = name
     @staticmethod
     def _validate(to ,frm):
         if type(to)==Place:
             raise TypeError
-        # assert(type(to)==Transition)
         assert(type(frm)==Place)

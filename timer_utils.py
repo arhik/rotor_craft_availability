@@ -1,5 +1,6 @@
 from random import Random
 import math
+
 def timer_uniform(low=0, high=10):
     r = Random()
     while True:
@@ -17,6 +18,10 @@ def timer_sinusoidal(amp = 10, low = 0, high = 10):
     init  = 0
     r = Random()
     while True:
-        init = init + 1
+        init = init + 10
         value  = amp + math.floor(amp*math.sin(init)) + r.randint(low,high)
         yield value if value >= 1 else 1
+
+def timer_constant(const=1):
+    while True:
+        yield const
