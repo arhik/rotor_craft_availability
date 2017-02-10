@@ -20,7 +20,6 @@ class Transition:
         self.fire_bool = True
         for arc in self.inArcs:
             if arc.type=="InhibitorArc":
-                # print(arc.weight)
                 self.fire_bool = self.fire_bool and bool(arc.frm.token_number >= arc.weight) # double check equality
             else:
                 self.fire_bool = self.fire_bool and bool(arc.frm.token_number >= arc.weight)
@@ -71,7 +70,7 @@ class TimedTransition(Transition):
             if self.tickMark ==None:
                 self.tickMark = self.clock.timeElapsed
             if self.timeInterval == None:
-                self.timeInterval = int 
+                self.timeInterval = 0 
             if (self.timeInterval == (self.clock.timeElapsed - self.tickMark)):
                 self.fire()
                 self.tickMark = None

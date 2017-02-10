@@ -89,7 +89,7 @@ print("-"*30)
 print("Token observers Test")
 print("-"*30)
 
-P6.token_observers.append(A7)
+P6.tokenObservers.append(A7)
 
 
 A8 = Arc(P8, T3)
