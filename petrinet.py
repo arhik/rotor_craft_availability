@@ -22,6 +22,8 @@ class PetriNet:
         self.A11 = Arc(self.T6,self.P10)
         self.A12 = Arc(self.P11,self.T6)
         self.A13 = Arc(self.T5, self.P11)
+
+
         
         #InputDemand Section
         self.T0 = TimedTransition(self.clk, timer=timer_sinusoidal(amp=3,low=0,high=2), name="InputDemandTransition")
@@ -31,19 +33,20 @@ class PetriNet:
         
         #Request Section
         self.T8 = TimedTransition(self.clk, timer=timer_normal(mu=3,sigma=2), name="InputRequestTransition")
-        self.P12 = Place(name="RequestPlace")
+        self.P12 = Place(capacity=1,name="RequestPlace")
         self.A14 = Arc(self.P12, self.T8,name="InputTRequestPArc")
 
-        # Request Reset Section
+        # InputDemand and Request Reset Section
         self.T9 = ImmediateTransition(self.clk,name="InputRequestResetTransition")
         self.A15 = Arc(self.T9, self.P12, name="RequestPResetTArc")
+        self.A18 = Arc(self.T9, self.P1, name="DemandPResetTArc")
 
         # Demand Reset Arc
-        self.T10 = ImmediateTransition(self.clk, name="DemandRequestResetTransition")
-        self.A16 = Arc(self.T10, self.P1, name="DemandPlaceResetArc")
-        self.A17 = Arc(self.T10, self.P12, name="RequestDemandPlaceResetArc")
+        # self.T10 = ImmediateTransition(self.clk, name="DemandRequestResetTransition")
+        # self.A16 = Arc(self.T10, self.P1, name="DemandPlaceResetArc")
+        # self.A17 = Arc(self.T10, self.P12, name="RequestDemandPlaceResetArc")
         #subscribe Demand token_number with arcweight
-        self.P1.token_observers.append(self.A16)
+        self.P1.token_observers.append(self.A18)
 
         # Main Logic Transitions and Arcs
         self.T7 = ImmediateTransition(self.clk,name="AvailabilityTransition")
@@ -59,10 +62,10 @@ class PetriNet:
         self.P2 = Place(name="AvailabilityPlace")
         self.A6 = Arc(self.P2, self.T7, name='AvailabilityTAvailabilityPArc')
         
-        self.T4 = ImmediateTransition(self.clk, name="AvailabiltyPlaceResetTransition")
-        self.A5 = Arc(self.T8, self.P2, name='AvailabiltyPAvailabilityResetArc')
+        # self.T4 = ImmediateTransition(self.clk, name="AvailabiltyPlaceResetTransition")
+        # self.A5 = Arc(self.T8, self.P2, name='AvailabiltyPAvailabilityResetArc')
 
-        self.transitions = [self.T0,self.T8,  self.T5, self.T6,self.T7, self.T10, self.T9, self.T4 ]
+        self.transitions = [self.T0,self.T8,  self.T5, self.T6,self.T7, self.T9 ] #, self.T4
     
     def run(self):
         for i in count():

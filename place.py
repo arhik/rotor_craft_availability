@@ -29,7 +29,7 @@ class Place:
     
     @token_number.setter 
     def token_number(self, updated_token_number):
-        self._token_number = updated_token_number
+        self._token_number = updated_token_number if updated_token_number <= self.capacity else self._token_number
         for token_observer in self.token_observers:
             token_observer.update(self.token_number)
     
