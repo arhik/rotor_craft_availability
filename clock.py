@@ -5,10 +5,14 @@ class Clock:
 
     def reset(self):
         self.timeElapsed = 0
+        for i in clockListeners:
+            if isinstance(i, Place):
+                i.token_number = 0
+
 
     def update(self):
         for i in self.clockListeners:
-            i.clkupdate()
+            i.broadcast()
     
     def tick(self):
         while True:
