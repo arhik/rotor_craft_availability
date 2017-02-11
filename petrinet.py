@@ -20,10 +20,13 @@ class PetriNet:
         # Buffer Section
         self.T5 = TimedTransition(self.clk, timer=timer_normal(mu=3, sigma=2), name="RepairTransition")
         self.P10 = Place(token_number=3, clk = self.clk, name="Depo" )
-        self.T6 = TimedTransition(self.clk, timer= timer_normal(mu =2, sigma=2), name="FailTransition")
+        self.T6 = TimedTransition(self.clk, timer= timer_normal(mu =2, sigma=2), name="OnMissionToMaintainanceTransition")
         self.P11 = Place(clk = self.clk, name="RepairState")
+        self.P4 = Place(clk=self.clk, name="OnMissionState")
         self.A10 = Arc(self.P10,self.T5)
-        self.A11 = Arc(self.T6,self.P10)
+
+        
+        self.A16 = Arc(self.T6, self.P4)
         self.A12 = Arc(self.P11,self.T6)
         self.A13 = Arc(self.T5, self.P11)
 
@@ -55,20 +58,24 @@ class PetriNet:
         self.T7 = ImmediateTransition(self.clk,name="AvailabilityTransition")
         # self.A7 = Arc(self.T7,self.P1,name="DemandPAvailabilityTArc")
         self.A8 = Arc(self.T7, self.P12, name="RequestPAvailabilityTArc")
-        self.A9 = InhibitorArc(self.T7, self.P10, name="DepoPAvailabilityArc")
+        self.A9 = Arc(self.T7, self.P10, name="DepoPAvailabilityArc")
+        self.A11 = Arc(self.P4,self.T7)
 
         # subscribe the A9 weight to P1.token_number
         self.P1.tokenObservers.append(self.A9)
+        self.P1.tokenObservers.append(self.A11)
         # self.P1.tokenObservers.append(self.A7)
         
         # Availability Section
         self.P2 = Place(name="AvailabilityPlace",clk=self.clk)
+        self.P12.relativeActivityListeners.append(self.P2)
+
         self.A6 = Arc(self.P2, self.T7, name='AvailabilityTAvailabilityPArc')
         
         self.T4 = ImmediateTransition(self.clk,name="AvailabiltyPlaceResetTransition")
         self.A5 = Arc(self.T4, self.P2, name='AvailabiltyPAvailabilityResetArc')
 
-        self.transitions = [self.T0,self.T8,  self.T5, self.T6,self.T7, self.T9, self.T4]
+        self.transitions = [self.T4, self.T0,self.T8, self.T7, self.T9, self.T5, self.T6 ]
 
         #setting up plots
         self.window = Window()
@@ -123,6 +130,12 @@ class PetriNet:
         self.P2.activityListeners.append(Curve(self.clk, P2_activity_curve, self.window.proc))
         self.P1.intervalActivityListeners.append(Curve(self.clk, P1_intervalActivity_curve, self.window.proc))
         self.P2.intervalActivityListeners.append(Curve(self.clk, P2_intervalActivity_curve, self.window.proc))
+
+        self.win.nextRow()
+        self.onDemandAvailability = self.win.addPlot()
+        self.onDemandAvailability.setLabel('top',"Availibilty", "ondemand activity")
+        onDemandAvailability_curve = self.onDemandAvailability.plot(pen="k")
+        self.P2.relativeActivityListeners.append(Curve(self.clk, onDemandAvailability_curve, self.window.proc))
         
     def run(self):
         for i in count():
@@ -140,8 +153,10 @@ class PetriNet:
                 print("{} Token_number: {}".format(self.P2.name, self.P2.token_number))
 
                 print("--TRANSITIONS--")
+
                 activeTransitions = []
                 inActiveTransitions = []
+                # while len(activeTransitions)
                 for t in self.transitions:
                     if t.computeFire() == True:
                         activeTransitions.append(t)
@@ -153,12 +168,13 @@ class PetriNet:
                         print("{} timeInterval: {}".format(t.name,t.timeInterval))
                         print("{} tickMark: {}".format(t.name, t.tickMark))
                         print("{} timeElapsed: {}".format(t.name, t.clock.timeElapsed))
-                for t in inActiveTransitions:
-                    t.compute()
-                    if isinstance(t,Transition):
-                        print("{} timeInterval: {}".format(t.name,t.timeInterval))
-                        print("{} tickMark: {}".format(t.name, t.tickMark))
-                        print("{} timeElapsed: {}".format(t.name, t.clock.timeElapsed))
+                # for t in inActiveTransitions:
+                #     if t.computeFire() == True:
+                #         t.compute()
+                #     if isinstance(t,Transition):
+                #         print("{} timeInterval: {}".format(t.name,t.timeInterval))
+                #         print("{} tickMark: {}".format(t.name, t.tickMark))
+                #         print("{} timeElapsed: {}".format(t.name, t.clock.timeElapsed))
                 print("--"*25)
                 print("--"*10+"AFTER"+"--"*10)
                 print("--"*25)
@@ -170,11 +186,13 @@ class PetriNet:
 
             except KeyboardInterrupt as e:
                 sys.exit(1)
+
+
+
+
 def main():
     net = PetriNet()
     net.run()
 
 if __name__=='__main__':
     main()
-            
-        

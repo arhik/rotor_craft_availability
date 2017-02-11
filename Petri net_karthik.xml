@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pnml>
+    <net>
+        <token id="Default" red="0" green="0" blue="0"/>
+        <place id="DemandCount">
+            <graphics>
+                <position x="105.0" y="105.0"/>
+            </graphics>
+            <name>
+                <value>DemandCount</value>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+            </name>
+            <capacity>
+                <value>0</value>
+            </capacity>
+            <initialMarking>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+                <value>Default,0</value>
+            </initialMarking>
+        </place>
+        <place id="Depo">
+            <graphics>
+                <position x="81.0" y="351.0"/>
+            </graphics>
+            <name>
+                <value>Depo</value>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+            </name>
+            <capacity>
+                <value>0</value>
+            </capacity>
+            <initialMarking>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+                <value>Default,3</value>
+            </initialMarking>
+        </place>
+        <place id="P7">
+            <graphics>
+                <position x="410.0" y="303.0"/>
+            </graphics>
+            <name>
+                <value>P7</value>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+            </name>
+            <capacity>
+                <value>1</value>
+            </capacity>
+            <initialMarking>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+                <value>Default,1</value>
+            </initialMarking>
+        </place>
+        <place id="RequestToken ">
+            <graphics>
+                <position x="105.0" y="225.0"/>
+            </graphics>
+            <name>
+                <value>RequestToken </value>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+            </name>
+            <capacity>
+                <value>0</value>
+            </capacity>
+            <initialMarking>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+                <value>Default,0</value>
+            </initialMarking>
+        </place>
+        <place id="RepairState">
+            <graphics>
+                <position x="78.0" y="524.0"/>
+            </graphics>
+            <name>
+                <value>RepairState</value>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+            </name>
+            <capacity>
+                <value>0</value>
+            </capacity>
+            <initialMarking>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+                <value>Default,0</value>
+            </initialMarking>
+        </place>
+        <place id="AvailableState">
+            <graphics>
+                <position x="330.0" y="225.0"/>
+            </graphics>
+            <name>
+                <value>AvailableState</value>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+            </name>
+            <capacity>
+                <value>0</value>
+            </capacity>
+            <initialMarking>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+                <value>Default,0</value>
+            </initialMarking>
+        </place>
+        <place id="reset">
+            <graphics>
+                <position x="330.0" y="105.0"/>
+            </graphics>
+            <name>
+                <value>reset</value>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+            </name>
+            <capacity>
+                <value>0</value>
+            </capacity>
+            <initialMarking>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+                <value>Default,0</value>
+            </initialMarking>
+        </place>
+        <place id="FailureState">
+            <graphics>
+                <position x="226.0" y="420.0"/>
+            </graphics>
+            <name>
+                <value>FailureState</value>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+            </name>
+            <capacity>
+                <value>0</value>
+            </capacity>
+            <initialMarking>
+                <graphics>
+                    <offset x="0.0" y="0.0"/>
+                </graphics>
+                <value>Default,0</value>
+            </initialMarking>
+        </place>
+        <transition id="T4">
+            <graphics>
+                <position x="240.0" y="225.0"/>
+            </graphics>
+            <name>
+                <value>T4</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>false</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
+                <value>1.0</value>
+            </rate>
+        </transition>
+        <transition id="T5">
+            <graphics>
+                <position x="420.0" y="105.0"/>
+            </graphics>
+            <name>
+                <value>T5</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>false</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
+                <value>1.0</value>
+            </rate>
+        </transition>
+        <transition id="T10">
+            <graphics>
+                <position x="420.0" y="225.0"/>
+            </graphics>
+            <name>
+                <value>T10</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>false</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
+                <value>1.0</value>
+            </rate>
+        </transition>
+        <transition id="T7">
+            <graphics>
+                <position x="234.0" y="521.0"/>
+            </graphics>
+            <name>
+                <value>T7</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>true</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
+                <value>1.0</value>
+            </rate>
+        </transition>
+        <transition id="T12">
+            <graphics>
+                <position x="340.0" y="304.0"/>
+            </graphics>
+            <name>
+                <value>T12</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>false</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
+                <value>1.0</value>
+            </rate>
+        </transition>
+        <transition id="T9">
+            <graphics>
+                <position x="60.0" y="255.0"/>
+            </graphics>
+            <name>
+                <value>T9</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>false</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
+                <value>1.0</value>
+            </rate>
+        </transition>
+        <transition id="T0">
+            <graphics>
+                <position x="15.0" y="105.0"/>
+            </graphics>
+            <name>
+                <value>T0</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>true</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
+                <value>1.0</value>
+            </rate>
+        </transition>
+        <transition id="T1">
+            <graphics>
+                <position x="15.0" y="225.0"/>
+            </graphics>
+            <name>
+                <value>T1</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>true</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
+                <value>1.0</value>
+            </rate>
+        </transition>
+        <transition id="T2">
+            <graphics>
+                <position x="90.0" y="420.0"/>
+            </graphics>
+            <name>
+                <value>T2</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>true</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
+                <value>1.0</value>
+            </rate>
+        </transition>
+        <transition id="T3">
+            <graphics>
+                <position x="240.0" y="105.0"/>
+            </graphics>
+            <name>
+                <value>T3</value>
+                <graphics>
+                    <offset x="-5.0" y="35.0"/>
+                </graphics>
+            </name>
+            <infiniteServer>
+                <value>false</value>
+            </infiniteServer>
+            <timed>
+                <value>false</value>
+            </timed>
+            <priority>
+                <value>1</value>
+            </priority>
+            <orientation>
+                <value>0</value>
+            </orientation>
+            <rate>
+                <value>1.0</value>
+            </rate>
+        </transition>
+        <arc id="T4 to Available State" source="T4" target="AvailableState">
+            <arcpath id="" x="250.0" y="240.0" curvePoint="false"/>
+            <arcpath id="" x="330.0" y="240.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="T1 to Request token " source="T1" target="RequestToken ">
+            <arcpath id="" x="25.0" y="240.0" curvePoint="false"/>
+            <arcpath id="" x="105.0" y="240.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="T0 to Demand Count" source="T0" target="DemandCount">
+            <arcpath id="" x="25.0" y="120.0" curvePoint="false"/>
+            <arcpath id="" x="105.0" y="120.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="T12 to P7" source="T12" target="P7">
+            <arcpath id="" x="350.0" y="319.0" curvePoint="false"/>
+            <arcpath id="" x="410.0" y="318.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="T4 TO FailureState" source="T4" target="FailureState">
+            <arcpath id="" x="245.0" y="255.0" curvePoint="false"/>
+            <arcpath id="" x="241.0" y="420.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,#(DemandCount)</value>
+            </inscription>
+        </arc>
+        <arc id="T7 to repair state" source="T7" target="RepairState">
+            <arcpath id="" x="234.0" y="536.0" curvePoint="false"/>
+            <arcpath id="" x="108.0" y="539.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="T3 to reset" source="T3" target="reset">
+            <arcpath id="" x="250.0" y="120.0" curvePoint="false"/>
+            <arcpath id="" x="330.0" y="120.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="T2 to Depo" source="T2" target="Depo">
+            <arcpath id="" x="95.0" y="420.0" curvePoint="false"/>
+            <arcpath id="" x="96.0" y="381.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="Request token  to T9" source="RequestToken " target="T9">
+            <arcpath id="" x="107.0" y="247.0" curvePoint="false"/>
+            <arcpath id="" x="70.0" y="270.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="FailureState TO T7" source="FailureState" target="T7">
+            <arcpath id="" x="241.0" y="450.0" curvePoint="false"/>
+            <arcpath id="" x="239.0" y="521.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="repair state to T2" source="RepairState" target="T2">
+            <arcpath id="" x="93.0" y="524.0" curvePoint="false"/>
+            <arcpath id="" x="95.0" y="450.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="AvailableState to T12" source="AvailableState" target="T12">
+            <arcpath id="" x="345.0" y="255.0" curvePoint="false"/>
+            <arcpath id="" x="345.0" y="304.0" curvePoint="false"/>
+            <type value="inhibitor"/>
+            <inscription>
+                <value></value>
+            </inscription>
+        </arc>
+        <arc id="AvailableState to T10" source="AvailableState" target="T10">
+            <arcpath id="" x="360.0" y="240.0" curvePoint="false"/>
+            <arcpath id="" x="420.0" y="240.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="Request token  to T4" source="RequestToken " target="T4">
+            <arcpath id="" x="135.0" y="240.0" curvePoint="false"/>
+            <arcpath id="" x="240.0" y="240.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="Request token  to T3" source="RequestToken " target="T3">
+            <arcpath id="" x="131.0" y="230.0" curvePoint="false"/>
+            <arcpath id="" x="240.0" y="120.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="Depo to T4" source="Depo" target="T4">
+            <arcpath id="" x="111.0" y="364.0" curvePoint="false"/>
+            <arcpath id="" x="132.0" y="361.0" curvePoint="true"/>
+            <arcpath id="" x="245.0" y="255.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,#(DemandCount)</value>
+            </inscription>
+        </arc>
+        <arc id="reset to T5" source="reset" target="T5">
+            <arcpath id="" x="360.0" y="120.0" curvePoint="false"/>
+            <arcpath id="" x="420.0" y="120.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+        <arc id="Demand Count to T3" source="DemandCount" target="T3">
+            <arcpath id="" x="135.0" y="120.0" curvePoint="false"/>
+            <arcpath id="" x="240.0" y="120.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,#(DemandCount)</value>
+            </inscription>
+        </arc>
+        <arc id="P7 to T10" source="P7" target="T10">
+            <arcpath id="" x="425.0" y="303.0" curvePoint="false"/>
+            <arcpath id="" x="425.0" y="255.0" curvePoint="false"/>
+            <type value="normal"/>
+            <inscription>
+                <value>Default,1</value>
+            </inscription>
+        </arc>
+    </net>
+</pnml>

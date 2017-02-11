@@ -20,6 +20,7 @@ class Curve:
         self.data_x = proc.transfer([])
         self.data_y = proc.transfer([])
         self._t = None
+        self.type = "curve"
 
     @property
     def t(self):

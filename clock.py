@@ -10,7 +10,7 @@ class Clock:
                 i.token_number = 0
 
 
-    def update(self):
+    def sync(self):
         for i in self.clockListeners:
             i.broadcast()
     
@@ -18,4 +18,5 @@ class Clock:
         while True:
             self.timeElapsed = self.timeElapsed + 1
             yield self.timeElapsed
-            self.update()
+            self.sync()
+            

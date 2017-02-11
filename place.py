@@ -17,7 +17,8 @@ class Place:
         self._intervalActivity = []
         self._percentActive = float(0)
         self._percentIntervalActive = float(0)
-        
+        self._relativeActivity = False
+        self._previous_active = None
         
     @property
     def active(self):
@@ -42,8 +43,23 @@ class Place:
     @property
     def token_number(self):
         return self._token_number
+
+    @property
+    def relativeActivity(self):
+        return self._relativeActivity
+
+    def relativeActivityUpdate(self, remoteActivity):
+        try:
+            self._relativeActivity = float(self.totalActivity)/remoteActivity
+        except ZeroDivisionError:
+            self._relativeActivity = 0.
+    
+    def reset():
+        self.token_number = 0
+        
     
     def broadcast(self):
+        self._previous_active = self._active
         self._active = 1 if self.token_number > 0 else 0
         self._intervalActivity.append(self.token_number)
         self._activeSum = self._activeSum + self.active
@@ -54,7 +70,10 @@ class Place:
             for activityListener in self.activityListeners:
                 activityListener.update(self.steadyStateActivity)
             for relativeActiveListener in self.relativeActivityListeners:
-                relativeActiveListener.relativeUpdate(0)
+                if isinstance(relativeActiveListener, Place):
+                    relativeActiveListener.relativeActivityUpdate(self.totalActivity)
+                elif relativeActiveListener.type == "curve":
+                    relativeActiveListener.update(self.relativeActivity)
             for intervalActivityListener in self.intervalActivityListeners:
                 intervalActivityListener.update(self.intervalActivity)
     
