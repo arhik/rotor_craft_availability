@@ -23,9 +23,9 @@ def timer_sinusoidal(clk = None, amp = 10, low = 0, high = 10):
         if clk == None:
             t = t + 1
         else:
-            t = clk.timeElapsed
-        value  = amp + math.floor(amp*math.sin(t)) + r.randint(low,high)
-        yield value if value >= 1 else 1
+            t = clk.timeElapsed*(math.pi/120)
+        value  = amp*(1 + math.floor(math.sin(t))) + r.randint(low,high)
+        yield int(value) if value >= 1 else 1
 
 def timer_constant(const=1):
     while True:

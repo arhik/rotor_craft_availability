@@ -10,8 +10,8 @@ class Window:
     def __init__(self): 
         self.proc = mp.QtProcess()
         self.rpg = self.proc._import('pyqtgraph')
-        self.rpg.setConfigOption('background', 'k')
-        self.rpg.setConfigOption('foreground', 'w')
+        self.rpg.setConfigOption('background', 'w')
+        self.rpg.setConfigOption('foreground', 'k')
 
 class Curve:
     def __init__(self, clk, curve, proc):

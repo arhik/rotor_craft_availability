@@ -7,33 +7,56 @@ class Place:
         self.inArcs = []
         self.outArcs = []
         self.tokenObservers = []
-        self.activationListeners = []
+        self.activityListeners = []
+        self.intervalActivityListeners = []
+        self.relativeActivityListeners = []
         self.name = name
         self.capacity = capacity
         self._active = 0
         self._activeSum = 0
+        self._intervalActivity = []
         self._percentActive = float(0)
+        self._percentIntervalActive = float(0)
         
         
     @property
     def active(self):
-        self._active = 1 if self.token_number > 0 else 0
-        self._activeSum = self._activeSum + self._active
         return self._active
-
+    
     @property
-    def percentage_active(self):
-        pass
+    def totalActivity(self):
+        return self._activeSum
+    
+    @property
+    def steadyStateActivity(self):
+        return self._percentActive
+    
+    @property
+    def intervalActivity(self):
+        if len(self._intervalActivity)==24:
+            self._percentIntervalActive = float(sum(self._intervalActivity))/24
+            self._intervalActivity  = []
+        return self._percentIntervalActive
+
 
     @property
     def token_number(self):
         return self._token_number
     
     def broadcast(self):
+        self._active = 1 if self.token_number > 0 else 0
+        self._intervalActivity.append(self.token_number)
+        self._activeSum = self._activeSum + self.active
+        self._percentActive  = self._activeSum/self.clk.timeElapsed
         if self.clk is not None:
             for tokenObserver in self.tokenObservers:
                 tokenObserver.update(self.token_number)
-
+            for activityListener in self.activityListeners:
+                activityListener.update(self.steadyStateActivity)
+            for relativeActiveListener in self.relativeActivityListeners:
+                relativeActiveListener.relativeUpdate(0)
+            for intervalActivityListener in self.intervalActivityListeners:
+                intervalActivityListener.update(self.intervalActivity)
     
     @token_number.setter 
     def token_number(self, updated_token_number):

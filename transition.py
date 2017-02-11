@@ -1,29 +1,29 @@
 
 class Transition:
     def __init__(self, name=None):
-        self.fire_bool = False
+        self.fireBool = False
         self.inArcs = []
         self.outArcs = []
         self.name = name
 
     def computeFire(self):
-        # self.fire_bool = False
+        # self.fireBool = False
         # if len(self.inArcs)==0:
-        #     self.fire_bool = True
-        #     return self.fire_bool
+        #     self.fireBool = True
+        #     return self.fireBool
         # if len(self.outArcs)==0:
-        #     self.fire_bool = True
-        #     return self.fire_bool
+        #     self.fireBool = True
+        #     return self.fireBool
 
         # if type(self) not in [TimedTransition, ImmediateTransition]:
         #     raise TypeError
-        self.fire_bool = True
+        self.fireBool = True
         for arc in self.inArcs:
             if arc.type=="InhibitorArc":
-                self.fire_bool = self.fire_bool and bool(arc.frm.token_number >= arc.weight) # double check equality
+                self.fireBool = self.fireBool and bool(arc.frm.token_number >= arc.weight) # double check equality
             else:
-                self.fire_bool = self.fire_bool and bool(arc.frm.token_number >= arc.weight)
-        return self.fire_bool
+                self.fireBool = self.fireBool and bool(arc.frm.token_number >= arc.weight)
+        return self.fireBool
 
     def fire(self):
         for arc in self.inArcs:
@@ -62,11 +62,11 @@ class TimedTransition(Transition):
             self._timeInterval = 0 if self.timer==None else next(self.timer)
 
     def compute(self):
-        self.computeFire()
-        if not self.fire_bool:
+        # self.computeFire()
+        if not self.fireBool:
             self.timeMark = None
             self.timeInterval = None
-        if  self.fire_bool:
+        if  self.fireBool:
             if self.tickMark ==None:
                 self.tickMark = self.clock.timeElapsed
             if self.timeInterval == None:
