@@ -39,6 +39,9 @@ class Transition:
     def compute(self):
         raise TypeError
 
+    def reset(self):
+        raise TypeError
+
 
 
 
@@ -47,6 +50,7 @@ class TimedTransition(Transition):
         super().__init__(name)
         self.timer = timer
         self.clock = clock
+        self.clock.clockListeners.append(self)
         self.tickMark = None
         self._timeInterval = None
     
@@ -60,11 +64,15 @@ class TimedTransition(Transition):
             self._timeInterval = None
         else:
             self._timeInterval = 0 if self.timer==None else next(self.timer)
+        
+    def reset(self):
+        self.tickMark = None
+        self.timeInterval = None
 
     def compute(self):
         # self.computeFire()
         if not self.fireBool:
-            self.timeMark = None
+            self.tickMark = None
             self.timeInterval = None
         if  self.fireBool:
             if self.tickMark ==None:

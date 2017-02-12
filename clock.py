@@ -1,3 +1,5 @@
+from place import Place
+from transition import Transition
 class Clock:
     def __init__(self):
         self.timeElapsed = 0
@@ -5,14 +7,17 @@ class Clock:
 
     def reset(self):
         self.timeElapsed = 0
-        for i in clockListeners:
+        for i in self.clockListeners:
             if isinstance(i, Place):
-                i.token_number = 0
+                i.reset()
+            elif isinstance(i, Transition):
+                i.reset()
 
 
     def sync(self):
         for i in self.clockListeners:
-            i.broadcast()
+            if isinstance(i, Place):
+                i.broadcast()
     
     def tick(self):
         while True:

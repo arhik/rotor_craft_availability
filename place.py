@@ -18,7 +18,7 @@ class Place:
         self._percentActive = float(0)
         self._percentIntervalActive = float(0)
         self._relativeActivity = False
-        self._previous_active = None
+        self._previous_active = False
         
     @property
     def active(self):
@@ -30,12 +30,16 @@ class Place:
     
     @property
     def steadyStateActivity(self):
+        try:
+            self._percentActive = self._activeSum/self.clk.timeElapsed
+        except ZeroDivisionError:
+            self._percentActive = 0.
         return self._percentActive
     
     @property
     def intervalActivity(self):
-        if len(self._intervalActivity)==24:
-            self._percentIntervalActive = float(sum(self._intervalActivity))/24
+        if len(self._intervalActivity)==10:
+            self._percentIntervalActive = float(sum(self._intervalActivity))
             self._intervalActivity  = []
         return self._percentIntervalActive
 
@@ -54,8 +58,14 @@ class Place:
         except ZeroDivisionError:
             self._relativeActivity = 0.
     
-    def reset():
-        self.token_number = 0
+    def reset(self):
+        self._token_number = 0
+        self._active = 0
+        self._activeSum = 0
+        self._intervalActivity = []
+        self._percentIntervalActive = float(0)
+        self._relativeActivity = False
+        self._previous_active = False
         
     
     def broadcast(self):
@@ -63,7 +73,6 @@ class Place:
         self._active = 1 if self.token_number > 0 else 0
         self._intervalActivity.append(self.token_number)
         self._activeSum = self._activeSum + self.active
-        self._percentActive  = self._activeSum/self.clk.timeElapsed
         if self.clk is not None:
             for tokenObserver in self.tokenObservers:
                 tokenObserver.update(self.token_number)

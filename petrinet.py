@@ -19,7 +19,7 @@ class PetriNet:
         
         # Buffer Section
         self.T5 = TimedTransition(self.clk, timer=timer_normal(mu=3, sigma=2), name="RepairTransition")
-        self.P10 = Place(token_number=3, clk = self.clk, name="Depo" )
+        self.P10 = Place(clk = self.clk, name="Depo" )
         self.T6 = TimedTransition(self.clk, timer= timer_normal(mu =2, sigma=2), name="OnMissionToMaintainanceTransition")
         self.P11 = Place(clk = self.clk, name="RepairState")
         self.P4 = Place(clk=self.clk, name="OnMissionState")
@@ -134,59 +134,69 @@ class PetriNet:
         self.win.nextRow()
         self.onDemandAvailability = self.win.addPlot()
         self.onDemandAvailability.setLabel('top',"Availibilty", "ondemand activity")
-        onDemandAvailability_curve = self.onDemandAvailability.plot(pen="k")
-        self.P2.relativeActivityListeners.append(Curve(self.clk, onDemandAvailability_curve, self.window.proc))
+        self.onDemandAvailability_curve = self.onDemandAvailability.plot(pen="k")
+        self.P2.relativeActivityListeners.append(Curve(self.clk, self.onDemandAvailability_curve, self.window.proc))
+
+        self.availabilityVSFleetSize =  self.win.addPlot()
+        self.availabilityVSFleetSize.setLabel('top', "Availability Trend", "availability vs fleet size")
+        self.availabilityVSFleetSize_curve = self.availabilityVSFleetSize.plot(pen='k')
+        self.availabiltyPlotting_handle  = Curve(self.clk, self.availabilityVSFleetSize_curve, self.window.proc)
+        
+
         
     def run(self):
-        for i in count():
-            try:
-                time.sleep(.1)
-                next(self.tick)
-                print("--"*25)
-                print("--"*10+"BEFORE"+"--"*10)
-                print("--"*25)
+        for fleet_size in range(1,10):
+            self.P10._token_number = fleet_size
+            for i in range(1000):
+                try:
+                    # time.sleep(.1)
+                    next(self.tick)
+                    print("--"*25)
+                    print("--"*10+"BEFORE"+"--"*10)
+                    print("--"*25)
 
-                print("{} Token_number: {}".format(self.P12.name, self.P12.token_number))
-                print("{} Token_number: {}".format(self.P10.name, self.P10.token_number))
-                print("{} Token_number: {}".format(self.P11.name, self.P11.token_number))
-                print("{} Token_number: {}".format(self.P1.name, self.P1.token_number))
-                print("{} Token_number: {}".format(self.P2.name, self.P2.token_number))
+                    print("{} Token_number: {}".format(self.P12.name, self.P12.token_number))
+                    print("{} Token_number: {}".format(self.P10.name, self.P10.token_number))
+                    print("{} Token_number: {}".format(self.P11.name, self.P11.token_number))
+                    print("{} Token_number: {}".format(self.P1.name, self.P1.token_number))
+                    print("{} Token_number: {}".format(self.P2.name, self.P2.token_number))
 
-                print("--TRANSITIONS--")
+                    print("--TRANSITIONS--")
 
-                activeTransitions = []
-                inActiveTransitions = []
-                # while len(activeTransitions)
-                for t in self.transitions:
-                    if t.computeFire() == True:
-                        activeTransitions.append(t)
-                    else:
-                        inActiveTransitions.append(t)
-                for t in activeTransitions:
-                    t.compute()
-                    if isinstance(t,Transition):
-                        print("{} timeInterval: {}".format(t.name,t.timeInterval))
-                        print("{} tickMark: {}".format(t.name, t.tickMark))
-                        print("{} timeElapsed: {}".format(t.name, t.clock.timeElapsed))
-                # for t in inActiveTransitions:
-                #     if t.computeFire() == True:
-                #         t.compute()
-                #     if isinstance(t,Transition):
-                #         print("{} timeInterval: {}".format(t.name,t.timeInterval))
-                #         print("{} tickMark: {}".format(t.name, t.tickMark))
-                #         print("{} timeElapsed: {}".format(t.name, t.clock.timeElapsed))
-                print("--"*25)
-                print("--"*10+"AFTER"+"--"*10)
-                print("--"*25)
-                print("{} Token_number: {}".format(self.P12.name, self.P12.token_number))
-                print("{} Token_number: {}".format(self.P10.name, self.P10.token_number))
-                print("{} Token_number: {}".format(self.P11.name, self.P11.token_number))
-                print("{} Token_number: {}".format(self.P1.name, self.P1.token_number))
-                print("{} Token_number: {}".format(self.P2.name, self.P2.token_number))
+                    activeTransitions = []
+                    inActiveTransitions = []
+                    # while len(activeTransitions)
+                    for t in self.transitions:
+                        if t.computeFire() == True:
+                            activeTransitions.append(t)
+                        else:
+                            inActiveTransitions.append(t)
+                    for t in activeTransitions:
+                        t.compute()
+                        if isinstance(t,Transition):
+                            print("{} timeInterval: {}".format(t.name,t.timeInterval))
+                            print("{} tickMark: {}".format(t.name, t.tickMark))
+                            print("{} timeElapsed: {}".format(t.name, t.clock.timeElapsed))
+                    # for t in inActiveTransitions:
+                    #     if t.computeFire() == True:
+                    #         t.compute()
+                    #     if isinstance(t,Transition):
+                    #         print("{} timeInterval: {}".format(t.name,t.timeInterval))
+                    #         print("{} tickMark: {}".format(t.name, t.tickMark))
+                    #         print("{} timeElapsed: {}".format(t.name, t.clock.timeElapsed))
+                    print("--"*25)
+                    print("--"*10+"AFTER"+"--"*10)
+                    print("--"*25)
+                    print("{} Token_number: {}".format(self.P12.name, self.P12.token_number))
+                    print("{} Token_number: {}".format(self.P10.name, self.P10.token_number))
+                    print("{} Token_number: {}".format(self.P11.name, self.P11.token_number))
+                    print("{} Token_number: {}".format(self.P1.name, self.P1.token_number))
+                    print("{} Token_number: {}".format(self.P2.name, self.P2.token_number))
 
-            except KeyboardInterrupt as e:
-                sys.exit(1)
-
+                except KeyboardInterrupt as e:
+                    sys.exit(1)
+            self.availabiltyPlotting_handle.update(self.P2.relativeActivity)
+            self.clk.reset()
 
 
 
