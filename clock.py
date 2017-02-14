@@ -24,4 +24,4 @@ class Clock:
             self.timeElapsed = self.timeElapsed + 1
             yield self.timeElapsed
             self.sync()
-            
+
