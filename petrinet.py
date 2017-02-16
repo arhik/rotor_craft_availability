@@ -147,7 +147,7 @@ class PetriNet:
     def run(self):
         for fleet_size in range(1,10):
             self.P10._token_number = fleet_size
-            for i in range(1000):
+            for i in range(240):
                 try:
                     # time.sleep(.1)
                     next(self.tick)
@@ -196,6 +196,8 @@ class PetriNet:
                 except KeyboardInterrupt as e:
                     sys.exit(1)
             self.availabiltyPlotting_handle.update(self.P2.relativeActivity)
+            with open('availability.csv', 'a+') as f:
+                f.writelines("{}, {}\n".format(i, self.P2.relativeActivity))
             self.clk.reset()
 
 

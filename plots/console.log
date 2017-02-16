@@ -1,0 +1,142 @@
+--------------------------------------------------
+--------------------AFTER--------------------
+--------------------------------------------------
+RequestPlace Token_number: 1
+Depo Token_number: 2
+RepairState Token_number: 5
+DemandPlace Token_number: 2
+AvailabilityPlace Token_number: 0
+--------------------------------------------------
+--------------------BEFORE--------------------
+--------------------------------------------------
+RequestPlace Token_number: 1
+Depo Token_number: 2
+RepairState Token_number: 5
+DemandPlace Token_number: 2
+AvailabilityPlace Token_number: 0
+--TRANSITIONS--
+InputDemandTransition timeInterval: 1
+InputDemandTransition tickMark: 237
+InputDemandTransition timeElapsed: 237
+InputRequestTransition timeInterval: 1
+InputRequestTransition tickMark: 237
+InputRequestTransition timeElapsed: 237
+AvailabilityTransition timeInterval: None
+AvailabilityTransition tickMark: None
+AvailabilityTransition timeElapsed: 237
+InputRequestResetTransition timeInterval: None
+InputRequestResetTransition tickMark: None
+InputRequestResetTransition timeElapsed: 237
+RepairTransition timeInterval: 5
+RepairTransition tickMark: 233
+RepairTransition timeElapsed: 237
+OnMissionToMaintainanceTransition timeInterval: None
+OnMissionToMaintainanceTransition tickMark: None
+OnMissionToMaintainanceTransition timeElapsed: 237
+--------------------------------------------------
+--------------------AFTER--------------------
+--------------------------------------------------
+RequestPlace Token_number: 0
+Depo Token_number: 0
+RepairState Token_number: 6
+DemandPlace Token_number: 0
+AvailabilityPlace Token_number: 1
+--------------------------------------------------
+--------------------BEFORE--------------------
+--------------------------------------------------
+RequestPlace Token_number: 0
+Depo Token_number: 0
+RepairState Token_number: 6
+DemandPlace Token_number: 0
+AvailabilityPlace Token_number: 1
+--TRANSITIONS--
+AvailabiltyPlaceResetTransition timeInterval: None
+AvailabiltyPlaceResetTransition tickMark: None
+AvailabiltyPlaceResetTransition timeElapsed: 238
+InputDemandTransition timeInterval: None
+InputDemandTransition tickMark: None
+InputDemandTransition timeElapsed: 238
+InputRequestTransition timeInterval: None
+InputRequestTransition tickMark: None
+InputRequestTransition timeElapsed: 238
+RepairTransition timeInterval: None
+RepairTransition tickMark: None
+RepairTransition timeElapsed: 238
+OnMissionToMaintainanceTransition timeInterval: 2
+OnMissionToMaintainanceTransition tickMark: 238
+OnMissionToMaintainanceTransition timeElapsed: 238
+--------------------------------------------------
+--------------------AFTER--------------------
+--------------------------------------------------
+RequestPlace Token_number: 1
+Depo Token_number: 1
+RepairState Token_number: 5
+DemandPlace Token_number: 1
+AvailabilityPlace Token_number: 0
+--------------------------------------------------
+--------------------BEFORE--------------------
+--------------------------------------------------
+RequestPlace Token_number: 1
+Depo Token_number: 1
+RepairState Token_number: 5
+DemandPlace Token_number: 1
+AvailabilityPlace Token_number: 0
+--TRANSITIONS--
+InputDemandTransition timeInterval: 1
+InputDemandTransition tickMark: 239
+InputDemandTransition timeElapsed: 239
+InputRequestTransition timeInterval: 2
+InputRequestTransition tickMark: 239
+InputRequestTransition timeElapsed: 239
+AvailabilityTransition timeInterval: None
+AvailabilityTransition tickMark: None
+AvailabilityTransition timeElapsed: 239
+InputRequestResetTransition timeInterval: None
+InputRequestResetTransition tickMark: None
+InputRequestResetTransition timeElapsed: 239
+RepairTransition timeInterval: 1
+RepairTransition tickMark: 239
+RepairTransition timeElapsed: 239
+OnMissionToMaintainanceTransition timeInterval: 2
+OnMissionToMaintainanceTransition tickMark: 238
+OnMissionToMaintainanceTransition timeElapsed: 239
+--------------------------------------------------
+--------------------AFTER--------------------
+--------------------------------------------------
+RequestPlace Token_number: 0
+Depo Token_number: 0
+RepairState Token_number: 5
+DemandPlace Token_number: 0
+AvailabilityPlace Token_number: 1
+--------------------------------------------------
+--------------------BEFORE--------------------
+--------------------------------------------------
+RequestPlace Token_number: 0
+Depo Token_number: 0
+RepairState Token_number: 5
+DemandPlace Token_number: 0
+AvailabilityPlace Token_number: 1
+--TRANSITIONS--
+AvailabiltyPlaceResetTransition timeInterval: None
+AvailabiltyPlaceResetTransition tickMark: None
+AvailabiltyPlaceResetTransition timeElapsed: 240
+InputDemandTransition timeInterval: None
+InputDemandTransition tickMark: None
+InputDemandTransition timeElapsed: 240
+InputRequestTransition timeInterval: 2
+InputRequestTransition tickMark: 239
+InputRequestTransition timeElapsed: 240
+RepairTransition timeInterval: None
+RepairTransition tickMark: None
+RepairTransition timeElapsed: 240
+OnMissionToMaintainanceTransition timeInterval: None
+OnMissionToMaintainanceTransition tickMark: None
+OnMissionToMaintainanceTransition timeElapsed: 240
+--------------------------------------------------
+--------------------AFTER--------------------
+--------------------------------------------------
+RequestPlace Token_number: 0
+Depo Token_number: 1
+RepairState Token_number: 5
+DemandPlace Token_number: 1
+AvailabilityPlace Token_number: 0
