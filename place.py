@@ -95,7 +95,7 @@ class Place:
             for tokenObserver in self.tokenObservers:
                 tokenObserver.update(self.token_number)
             for activityListener in self.activityListeners:
-                activityListener.update(self.steadyStateActivity)
+                activityListener.update(self.percentActivity)
             for relativeActiveListener in self.relativeActivityListeners:
                 if isinstance(relativeActiveListener, Place):
                     relativeActiveListener.relativeActivityUpdate(self.percentIntervalActivity)
