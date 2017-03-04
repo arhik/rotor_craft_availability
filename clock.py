@@ -18,7 +18,7 @@ class Clock:
         for i in self.clockListeners:
             if isinstance(i, Place):
                 i.broadcast()
-    
+
     def tick(self):
         while True:
             self.timeElapsed = self.timeElapsed + 1

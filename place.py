@@ -16,13 +16,18 @@ class Place:
         self._activeSum = 0
         self._intervalActivity = []
         self._percentActive = float(0)
-        self._percentIntervalActive = float(0)
-        self._relativeActivity = False
+        self._totalIntervalActivity = 0
+        self._relativeActivity = []
+        self._totalRelativeActivity = 0
         self._previous_active = False
         
     @property
     def active(self):
         return self._active
+
+    @property 
+    def prevActive(self):
+        return self._previous_active
     
     @property
     def totalActivity(self):
@@ -39,32 +44,35 @@ class Place:
     @property
     def intervalActivity(self):
         if len(self._intervalActivity)==10:
-            self._percentIntervalActive = float(sum(self._intervalActivity))
+            self._totalIntervalActivity = sum(self._intervalActivity)
             self._intervalActivity  = []
-        return self._percentIntervalActive
+        return self._totalIntervalActivity
 
 
     @property
     def token_number(self):
         return self._token_number
+    
+    @token_number.setter
+    def token_number(self, value):
+        self._token_number = value
 
     @property
     def relativeActivity(self):
-        return self._relativeActivity
+        self._totalRelativeActivity = sum(self._relativeActivity)
+        print(self._totalRelativeActivity)
+        return self._totalRelativeActivity
 
-    def relativeActivityUpdate(self, remoteActivity):
-        try:
-            self._relativeActivity = float(self.totalActivity)/remoteActivity
-        except ZeroDivisionError:
-            self._relativeActivity = 0.
+    def relativeActivityUpdate(self, remoteActivity, offset):
+        self._relativeActivity = [i*j for i,j in zip(self._intervalActivity[offset:]+self._intervalActivity[:offset], remoteActivity)]
     
     def reset(self):
         self._token_number = 0
         self._active = 0
         self._activeSum = 0
         self._intervalActivity = []
-        self._percentIntervalActive = float(0)
-        self._relativeActivity = False
+        self._totalIntervalActivity = float(0)
+        self._relativeActivity = []
         self._previous_active = False
         
     
@@ -80,7 +88,7 @@ class Place:
                 activityListener.update(self.steadyStateActivity)
             for relativeActiveListener in self.relativeActivityListeners:
                 if isinstance(relativeActiveListener, Place):
-                    relativeActiveListener.relativeActivityUpdate(self.totalActivity)
+                    relativeActiveListener.relativeActivityUpdate(self._intervalActivity,1)
                 elif relativeActiveListener.type == "curve":
                     relativeActiveListener.update(self.relativeActivity)
             for intervalActivityListener in self.intervalActivityListeners:

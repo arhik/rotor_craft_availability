@@ -1,3 +1,5 @@
+import random, math
+import numpy as np
 
 class Transition:
     def __init__(self, name=None):
@@ -42,8 +44,7 @@ class Transition:
     def reset(self):
         raise TypeError
 
-
-
+           
 
 class TimedTransition(Transition):
     def __init__(self,clock, timer=None, name=None):
@@ -75,7 +76,7 @@ class TimedTransition(Transition):
             self.tickMark = None
             self.timeInterval = None
         if  self.fireBool:
-            if self.tickMark ==None:
+            if self.tickMark == None:
                 self.tickMark = self.clock.timeElapsed
             if self.timeInterval == None:
                 self.timeInterval = 0 
@@ -89,3 +90,25 @@ class ImmediateTransition(TimedTransition):
     def __init__(self, clock, timer=None,name=None):
         super().__init__(clock, timer, name)
         self.timer = None
+        
+        
+class RequestTransition(TimedTransition):
+    def __init__(self, clock, timer=None,name=None):
+        super().__init__(clock, timer, name)
+        self.timer = None
+        self.clock = clock
+    
+    
+    def fireProb(self,freq=240):
+        t = self.clock.timeElapsed*(2*math.pi/freq)
+        #value  = (1 + math.sin(t))/2
+        value = (0.4 + 0.8*(1 + math.sin(t)))/2
+        return np.random.choice(2,1,p=[1.0-value,value])[0]
+        
+    
+    def compute(self):
+        # self.computeFire()
+        if self.fireProb(240):
+            self.fire()
+            self.tickMark = None
+            self.timeInterval = None

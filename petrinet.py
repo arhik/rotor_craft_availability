@@ -3,24 +3,30 @@ from transition import ImmediateTransition, TimedTransition
 from clock import Clock
 from arc import Arc, InhibitorArc
 from place import Place
-from timer_utils import timer_normal, timer_sinusoidal, timer_uniform, timer_constant
+from timer_utils import timer_normal, timer_sinusoidal, timer_uniform, timer_constant, timer_poisson
 from itertools import count
 import sys
 import time
 
 from plot import Window, Curve
 
+
+
 # class Env:
 #     def __init__(self,)
 class PetriNet:
+    DEBUG = True
     def __init__(self):
         self.clk = Clock()
         self.tick = self.clk.tick()
-        
+        self.init_net()
+        self.init_plot()
+    
+    def init_net(self):
         # Buffer Section
         self.T5 = TimedTransition(self.clk, timer=timer_normal(mu=3, sigma=2), name="RepairTransition")
         self.P10 = Place(clk = self.clk, name="Depo" )
-        self.T6 = TimedTransition(self.clk, timer= timer_normal(mu =2, sigma=2), name="OnMissionToMaintainanceTransition")
+        self.T6 = TimedTransition(self.clk, timer= timer_poisson(lmb=3), name="OnMissionToMaintainanceTransition")
         self.P11 = Place(clk = self.clk, name="RepairState")
         self.P4 = Place(clk=self.clk, name="OnMissionState")
         self.A10 = Arc(self.P10,self.T5)
@@ -76,6 +82,8 @@ class PetriNet:
         self.A5 = Arc(self.T4, self.P2, name='AvailabiltyPAvailabilityResetArc')
 
         self.transitions = [self.T4, self.T0,self.T8, self.T7, self.T9, self.T5, self.T6 ]
+
+    def init_plot(self):
 
         #setting up plots
         self.window = Window()
@@ -142,26 +150,29 @@ class PetriNet:
         self.availabilityVSFleetSize_curve = self.availabilityVSFleetSize.plot(pen='k')
         self.availabiltyPlotting_handle  = Curve(self.clk, self.availabilityVSFleetSize_curve, self.window.proc)
         
-
+    
         
     def run(self):
+
+        #Num of tokens in depot = fleet_size
         for fleet_size in range(1,10):
             self.P10._token_number = fleet_size
             for i in range(240):
                 try:
                     # time.sleep(.1)
                     next(self.tick)
-                    print("--"*25)
-                    print("--"*10+"BEFORE"+"--"*10)
-                    print("--"*25)
+                    if self.DEBUG:
+                        print("--"*25)
+                        print("--"*10+"BEFORE"+"--"*10)
+                        print("--"*25)
 
-                    print("{} Token_number: {}".format(self.P12.name, self.P12.token_number))
-                    print("{} Token_number: {}".format(self.P10.name, self.P10.token_number))
-                    print("{} Token_number: {}".format(self.P11.name, self.P11.token_number))
-                    print("{} Token_number: {}".format(self.P1.name, self.P1.token_number))
-                    print("{} Token_number: {}".format(self.P2.name, self.P2.token_number))
+                        print("{} Token_number: {}".format(self.P12.name, self.P12.token_number))
+                        print("{} Token_number: {}".format(self.P10.name, self.P10.token_number))
+                        print("{} Token_number: {}".format(self.P11.name, self.P11.token_number))
+                        print("{} Token_number: {}".format(self.P1.name, self.P1.token_number))
+                        print("{} Token_number: {}".format(self.P2.name, self.P2.token_number))
 
-                    print("--TRANSITIONS--")
+                        print("--TRANSITIONS--")
 
                     activeTransitions = []
                     inActiveTransitions = []
@@ -184,15 +195,16 @@ class PetriNet:
                     #         print("{} timeInterval: {}".format(t.name,t.timeInterval))
                     #         print("{} tickMark: {}".format(t.name, t.tickMark))
                     #         print("{} timeElapsed: {}".format(t.name, t.clock.timeElapsed))
-                    print("--"*25)
-                    print("--"*10+"AFTER"+"--"*10)
-                    print("--"*25)
-                    print("{} Token_number: {}".format(self.P12.name, self.P12.token_number))
-                    print("{} Token_number: {}".format(self.P10.name, self.P10.token_number))
-                    print("{} Token_number: {}".format(self.P11.name, self.P11.token_number))
-                    print("{} Token_number: {}".format(self.P1.name, self.P1.token_number))
-                    print("{} Token_number: {}".format(self.P2.name, self.P2.token_number))
-
+                    
+                    if self.DEBUG:
+                        print("--"*25)
+                        print("--"*10+"AFTER"+"--"*10)
+                        print("--"*25)
+                        print("{} Token_number: {}".format(self.P12.name, self.P12.token_number))
+                        print("{} Token_number: {}".format(self.P10.name, self.P10.token_number))
+                        print("{} Token_number: {}".format(self.P11.name, self.P11.token_number))
+                        print("{} Token_number: {}".format(self.P1.name, self.P1.token_number))
+                        print("{} Token_number: {}".format(self.P2.name, self.P2.token_number))
                 except KeyboardInterrupt as e:
                     sys.exit(1)
             self.availabiltyPlotting_handle.update(self.P2.relativeActivity)
