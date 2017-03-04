@@ -15,33 +15,49 @@ class Place:
         self._active = 0
         self._activeSum = 0
         self._intervalActivity = []
-        self._percentActive = float(0)
-        self._percentIntervalActive = float(0)
+        self._percentActivity = float(0)
+        self._totalIntervalActivity = 0
+        self._percentIntervalActivity = float(0)
         self._relativeActivity = False
         self._previous_active = False
         
     @property
-    def active(self):
+    def isActive(self):
+        return bool(self._active)
+
+    @property
+    def activity(self):
         return self._active
+    
     
     @property
     def totalActivity(self):
         return self._activeSum
     
     @property
-    def steadyStateActivity(self):
+    def percentActivity(self):
         try:
-            self._percentActive = self._activeSum/self.clk.timeElapsed
+            self._percentActivity = self._activeSum/self.clk.timeElapsed
         except ZeroDivisionError:
-            self._percentActive = 0.
-        return self._percentActive
+            self._percentActivity = 0.
+        return self._percentActivity
+    
+
+    @property
+    def totalIntervalActivity(self):
+        if len(self._intervalActivity)==10:
+            self._totalIntervalActivity = sum(self._intervalActivity)
+        return self._totalIntervalActivity
     
     @property
     def intervalActivity(self):
+        return self._intervalActivity
+
+    @property
+    def percentIntervalActivity(self):
         if len(self._intervalActivity)==10:
-            self._percentIntervalActive = float(sum(self._intervalActivity))
-            self._intervalActivity  = []
-        return self._percentIntervalActive
+            self._percentIntervalActivity = float(sum(self._intervalActivity))/len(self._intervalActivity)
+        return self._percentIntervalActivity
 
 
     @property
@@ -52,9 +68,9 @@ class Place:
     def relativeActivity(self):
         return self._relativeActivity
 
-    def relativeActivityUpdate(self, remoteActivity):
+    def relativeActivityUpdate(self, remotepercentIntervalActivity):
         try:
-            self._relativeActivity = float(self.totalActivity)/remoteActivity
+            self._relativeActivity = float(self.percentIntervalActivity)/remotepercentIntervalActivity
         except ZeroDivisionError:
             self._relativeActivity = 0.
     
@@ -71,8 +87,10 @@ class Place:
     def broadcast(self):
         self._previous_active = self._active
         self._active = 1 if self.token_number > 0 else 0
+        if len(self._intervalActivity)==10:
+            self._intervalActivity = []
         self._intervalActivity.append(self.token_number)
-        self._activeSum = self._activeSum + self.active
+        self._activeSum = self._activeSum + self._active
         if self.clk is not None:
             for tokenObserver in self.tokenObservers:
                 tokenObserver.update(self.token_number)
@@ -80,7 +98,7 @@ class Place:
                 activityListener.update(self.steadyStateActivity)
             for relativeActiveListener in self.relativeActivityListeners:
                 if isinstance(relativeActiveListener, Place):
-                    relativeActiveListener.relativeActivityUpdate(self.totalActivity)
+                    relativeActiveListener.relativeActivityUpdate(self.percentIntervalActivity)
                 elif relativeActiveListener.type == "curve":
                     relativeActiveListener.update(self.relativeActivity)
             for intervalActivityListener in self.intervalActivityListeners:
