@@ -49,7 +49,7 @@ class PetriNet:
         self.T4 = ImmediateTransition(self.clk, name="UnAvailabilityTransition")
         self.A8 = Arc(self.T4, self.P0)
         
-        self.P4 = Place(name="Avail", clk=self.clk)
+        self.P4 = Place(name="Avail", clk=self.clk, offset=1)
         self.A9 = Arc(self.P4, self.T1)
         self.T5 = ImmediateTransition(self.clk, name="AvailTransition")
         
@@ -133,18 +133,18 @@ class PetriNet:
         #P4_relative = []
         
         
-        total_time = 2400
-        avg = 100
+        total_time = 720
+        avg = 1000
         P0_tokens = [0 for i in range(total_time)]
         P4_tokens = [0 for i in range(total_time)]
         for x in range(avg):
-            self.P1.token_number = 10
+            self.P1.token_number = 100
         
             
             for time in range(total_time):
                 next(self.tick)
                 
-                P0_tokens[time] += (self.P0.intervalActivity)
+                P0_tokens[time] += (self.P0.totalIntervalActivity)
                 P4_tokens[time] += (self.P4.relativeActivity)
                 
                 
@@ -159,6 +159,7 @@ class PetriNet:
                     P4_tokens[cycle_pos] += self.P4.token_number
                     P4_relative[cycle_pos] += self.P4.relativeActivity
                 """
+
                 if self.DEBUG:
                     print("{} : {}".format(self.P0.name, self.P0.token_number))
                     print("{} : {}".format(self.P1.name, self.P1.token_number))
@@ -194,6 +195,7 @@ class PetriNet:
 
 def main():
     net = PetriNet()
+    # net.init_plot()
     net.run()
 
 if __name__=='__main__':

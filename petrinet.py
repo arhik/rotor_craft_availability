@@ -1,5 +1,5 @@
 from transition import Transition
-from transition import ImmediateTransition, TimedTransition
+from transition import ImmediateTransition, TimedTransition, RequestTransition
 from clock import Clock
 from arc import Arc, InhibitorArc
 from place import Place
@@ -37,7 +37,7 @@ class PetriNet:
         self.A13 = Arc(self.T5, self.P11)
 
         #InputDemand Section
-        self.T0 = TimedTransition(self.clk, timer=timer_sinusoidal(clk = self.clk, amp=5,low=0,high=0), name="InputDemandTransition")
+        self.T0 = RequestTransition(self.clk,name="InputDemandTransition")
         self.P1 = Place(name="DemandPlace", clk = self.clk)
         self.A0 = Arc(self.P1,self.T0, name="InputDemandArc")
 

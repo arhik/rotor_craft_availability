@@ -1,8 +1,8 @@
 class Place:
-    def __init__(self, token_number=0, capacity=float('Inf'), clk = None, name=None):
+    def __init__(self, token_number=0, capacity=float('Inf'), clk = None, name=None, offset=0):
         self.clk = clk # to be set
         if self.clk is not None:
-            self.clk.clockListeners.append(self)
+            self.clk.clockListeners.insert(0, self)
         self._token_number = token_number
         self.inArcs = []
         self.outArcs = []
@@ -14,13 +14,18 @@ class Place:
         self.capacity = capacity
         self._active = 0
         self._activeSum = 0
-        self._intervalActivity = []
         self._percentActivity = float(0)
-        self._totalIntervalActivity = 0
-        self._percentIntervalActivity = float(0)
-        self._relativeActivity = False
-        self._previous_active = False
-        
+        self._relativeActivity = 0
+        self._relativeOffsetActivity = []
+        self._relativeOffsetIntervalActivity = {}
+        self._history = {}
+        self._offset = offset
+        self._intervalActivity = []
+    
+    @property
+    def deltaT(self):
+        return self.clk.interval
+
     @property
     def isActive(self):
         return bool(self._active)
@@ -29,6 +34,13 @@ class Place:
     def activity(self):
         return self._active
     
+    @property
+    def offset(self):
+        return self._offset
+
+    @property
+    def history(self):
+        return self._history
     
     @property
     def totalActivity(self):
@@ -37,28 +49,25 @@ class Place:
     @property
     def percentActivity(self):
         try:
-            self._percentActivity = self._activeSum/self.clk.timeElapsed
+            self._percentActivity = self.totalActivity/self.clk.timeElapsed
         except ZeroDivisionError:
             self._percentActivity = 0.
         return self._percentActivity
     
-
     @property
     def totalIntervalActivity(self):
-        if len(self._intervalActivity)==10:
-            self._totalIntervalActivity = sum(self._intervalActivity)
-        return self._totalIntervalActivity
+        return sum(self._intervalActivity)
     
     @property
     def intervalActivity(self):
+        # print("currentInterval:{}".format(self.clk.currentInterval))
+        # print("IntervalActivity:{}".format(self._intervalActivity))
+        self._intervalActivity = [self.history[i] for i in self.clk.currentInterval[:min(len(self.history), self.clk.interval)]]
         return self._intervalActivity
 
     @property
     def percentIntervalActivity(self):
-        if len(self._intervalActivity)==10:
-            self._percentIntervalActivity = float(sum(self._intervalActivity))/len(self._intervalActivity)
-        return self._percentIntervalActivity
-
+        return float(self.totalIntervalActivity)/len(self.intervalActivity)
 
     @property
     def token_number(self):
@@ -68,28 +77,39 @@ class Place:
     def relativeActivity(self):
         return self._relativeActivity
 
-    def relativeActivityUpdate(self, remotepercentIntervalActivity):
-        try:
-            self._relativeActivity = float(self.percentIntervalActivity)/remotepercentIntervalActivity
-        except ZeroDivisionError:
-            self._relativeActivity = 0.
-    
+    def relativeActivityUpdate(self, remotehistory):
+        if self.clk.endOfInterval:
+            try:
+                tmp = []
+                # print(remotehistory)
+                for i in self.clk.currentInterval:
+                    try:
+                        tmp.append(remotehistory[i-self.offset])
+                    except KeyError as e:
+                        tmp.append(0)
+                self._relativeOffsetActivity = [i*j for i,j in zip(self.intervalActivity, tmp[:len(self.intervalActivity)])]
+                print("remotehistory: {}\n selfhistory: {}\n output: {}\n".format(tmp, self.intervalActivity, self._relativeOffsetActivity))
+                self._relativeActivity = (float(sum(self._relativeOffsetActivity))/sum(tmp)) if sum(self._relativeOffsetActivity) > 0 else 1.0
+            except ZeroDivisionError as z:
+                self._relativeActivity = 0.
+            except KeyError as k:
+                self._relativeActivity = 0.
+
+
     def reset(self):
         self._token_number = 0
         self._active = 0
         self._activeSum = 0
-        self._intervalActivity = []
         self._percentIntervalActive = float(0)
         self._relativeActivity = False
         self._previous_active = False
+        self._history = {}
+        self._intervalActivity = []
         
     
     def broadcast(self):
-        self._previous_active = self._active
         self._active = 1 if self.token_number > 0 else 0
-        if len(self._intervalActivity)==10:
-            self._intervalActivity = []
-        self._intervalActivity.append(self.token_number)
+        self._history.update({self.clk.timeElapsed: self._active})
         self._activeSum = self._activeSum + self._active
         if self.clk is not None:
             for tokenObserver in self.tokenObservers:
@@ -98,11 +118,12 @@ class Place:
                 activityListener.update(self.percentActivity)
             for relativeActiveListener in self.relativeActivityListeners:
                 if isinstance(relativeActiveListener, Place):
-                    relativeActiveListener.relativeActivityUpdate(self.percentIntervalActivity)
+                    relativeActiveListener.relativeActivityUpdate(self.history)
                 elif relativeActiveListener.type == "curve":
                     relativeActiveListener.update(self.relativeActivity)
             for intervalActivityListener in self.intervalActivityListeners:
-                intervalActivityListener.update(self.intervalActivity)
+                if self.clk.endOfInterval:
+                    intervalActivityListener.update(self.intervalActivity)
     
     @token_number.setter 
     def token_number(self, updated_token_number):
