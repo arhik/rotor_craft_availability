@@ -138,7 +138,7 @@ class PetriNet:
         P0_tokens = [0 for i in range(total_time)]
         P4_tokens = [0 for i in range(total_time)]
         for x in range(avg):
-            self.P1.token_number = 100
+            self.P1.token_number = 10
         
             
             for time in range(total_time):
